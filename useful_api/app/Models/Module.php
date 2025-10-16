@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Module extends Model
 {
-    //
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+    public function users(){
+        return $this->belongsToMany(User::class);
+    }
 }
