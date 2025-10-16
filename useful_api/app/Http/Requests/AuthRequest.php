@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class AuthRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,10 +21,19 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        if($this->isMethod('post') && $this->routeIs('register')){
         return [
             'name' => 'required|string',
             'email' => 'required|string|unique:users|email',
             'password' => 'required|string|min:8|confirmed'
-        ];
+        ];}
+
+        if($this->isMethod('post') && $this->routeIs('login')){
+        return [
+            'email' => 'required|string|email',
+            'password' => 'required|string'
+        ];}
+
+        return [];
     }
 }

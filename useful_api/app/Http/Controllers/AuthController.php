@@ -2,47 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function register(AuthRequest $request)
     {
-        //
+        $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        ]);
+
+        event(new Registered($user));
+            
+        return response()->json([
+            'message' => "Created",
+            'user' => $user
+        ],201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function login(AuthRequest $request)
     {
-        //
-    }
+        if(!Auth::attempt($request->only('email','password'))){
+            return response()->json(['message'=>'Invalid login credentials'],401);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $user = Auth::user();
+        $token = $user->createToken('API Token')->plainTextToken;
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['token'=>$token,'user_id'=>$user->id],200);
     }
 }

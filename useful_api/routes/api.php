@@ -6,6 +6,12 @@ use App\Http\Controllers\{AuthController,UserController, ModuleController};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('/register', AuthController::class);
-Route::apiResource('/login', AuthController::class);
-Route::apiResource('/modules', ModuleController::class);
+Route::post('/register', [AuthController::class,'register']);
+Route::post('/login', [AuthController::class,'login']);
+
+// Route::middleware('auth:sanctum')->group(function (){
+
+// });
+// Route::apiResource('modules', ModuleController::class);
+// Route::post('/modules/{id}/activate', ModuleController::class);
+// Route::post('/modules/{id}/deactivate', ModuleController::class);
