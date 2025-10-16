@@ -11,7 +11,6 @@ Route::post('/login', [AuthController::class,'login']);
 
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/modules', [ModuleController::class,'show']);
-
+    Route::post('/modules/{id}/activate', [ModuleController::class, "isActivated"]);
+    Route::post('/modules/{id}/deactivate', [ModuleController::class,"isDeactivated"]);
 });
-// Route::post('/modules/{id}/activate', ModuleController::class);
-// Route::post('/modules/{id}/deactivate', ModuleController::class);
